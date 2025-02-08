@@ -19,6 +19,7 @@ export default function ProfilePage() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Redirect user if not authenticated or accessing another user's profile
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function ProfilePage() {
       fetch(`/api/videos?userId=${userId}`)
         .then((res) => res.json())
         .then((data) => setVideos(data))
+        .then(() => setLoading(false))
         .catch(() => toast.error("Failed to load videos"));
     }
   }, [session, userId]);
@@ -111,6 +113,9 @@ export default function ProfilePage() {
     }
   };
 
+ 
+
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-900 p-6">
       <div className="bg-gray-800 shadow-xl rounded-lg p-8 w-full max-w-4xl">
@@ -125,36 +130,39 @@ export default function ProfilePage() {
         {/* User's Uploaded Videos */}
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-gray-50">Your Videos</h2>
-          <p className="text-gray-500 text-sm">Total videos: {videos.length}</p>
-
-          {videos.length > 0 ? (
-            <div className="grid gap-8 mt-6 sm:grid-cols-2 lg:grid-cols-3">
-              {videos.map((video) => (
-                <div key={video?._id} className="bg-gray-100 p-4 rounded-xl shadow-lg hover:shadow-2xl transition-all">
-                  <video
-                    src={video?.videoUrl}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                    controls
-                  />
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold text-gray-800">{video.title}</p>
-                      <p className="text-sm text-gray-600">{video.description}</p>
-                    </div>
-                    <button
-                      onClick={() => handleDeleteVideo(video._id)}
-                      className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-all"
-                    >
-                      Delete
-                    </button>
+          <p className="text-gray-50 text-sm">Uploads: {videos.length}</p>
+          
+          {loading ? (
+          <p className="text-lg text-gray-50 text-center">Loading videos...</p>
+        ) : videos.length > 0 ? (
+          <div className="grid gap-8 mt-6 sm:grid-cols-2 lg:grid-cols-3">
+            {videos.map((video) => (
+              <div key={video?._id} className="bg-gray-100 p-4 rounded-xl shadow-lg hover:shadow-2xl transition-all">
+                <video
+                  src={video?.videoUrl}
+                  className="w-full h-48 object-cover rounded-lg mb-4"
+                  controls
+                />
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold text-gray-800">{video.title}</p>
+                    <p className="text-sm text-gray-600">{video.description}</p>
                   </div>
+                  <button
+                    onClick={() => handleDeleteVideo(video._id)}
+                    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-all"
+                  >
+                    Delete
+                  </button>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-gray-500">No videos uploaded yet.</p>
-          )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500">No videos uploaded yet.</p>
+        )}
         </div>
+          
 
         {/* Change Password Button */}
         <div className="mt-12">

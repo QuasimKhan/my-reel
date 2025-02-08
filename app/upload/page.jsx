@@ -17,6 +17,8 @@ export default function UploadPage() {
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [thumbnailProgress, setThumbnailProgress] = useState(0);
+  const [videoProgress, setVideoProgress] = useState(0);
 
   // Redirect unauthenticated users
   useEffect(() => {
@@ -29,17 +31,23 @@ export default function UploadPage() {
   // Handle file upload success
   const handleThumbnailUploadSuccess = (res) => {
     setThumbnailUrl(res.url);
+    setThumbnailProgress(100);
     toast.success("Thumbnail uploaded successfully!");
   };
 
   const handleVideoUploadSuccess = (res) => {
     setVideoUrl(res.url);
+    setVideoProgress(100);
     toast.success("Video uploaded successfully!");
   };
 
   // Upload progress handlers
-  const handleUploadProgress = (progress) => {
-    console.log("Upload progress:", progress);
+  const handleThumbnailUploadProgress = (progress) => {
+    setThumbnailProgress(progress);
+  };
+
+  const handleVideoUploadProgress = (progress) => {
+    setVideoProgress(progress);
   };
 
   // Handle form submission
@@ -71,6 +79,8 @@ export default function UploadPage() {
         setDescription("");
         setThumbnailUrl("");
         setVideoUrl("");
+        setThumbnailProgress(0);
+        setVideoProgress(0);
       } else {
         toast.error(data.error || "Failed to upload video.");
       }
@@ -111,18 +121,34 @@ export default function UploadPage() {
         <label className="block text-sm font-medium text-gray-50">Upload Thumbnail</label>
         <FileUpload
           onSuccess={handleThumbnailUploadSuccess}
-          onProgress={handleUploadProgress}
+          onProgress={handleThumbnailUploadProgress}
           fileType="image"
         />
-        {thumbnailUrl && <p className="text-green-500 text-sm mt-2">Thumbnail uploaded!</p>}
+        {thumbnailProgress > 0 && (
+          <div className="w-full bg-gray-600 rounded-full h-1.5 mt-2">
+            <div
+              className="bg-blue-500 h-1.5 rounded-full"
+              style={{ width: `${thumbnailProgress}%` }}
+            ></div>
+          </div>
+        )}
+        {thumbnailProgress > 0 && <p className="text-white text-xs mt-1">{thumbnailProgress}%</p>}
 
         <label className="block text-sm font-medium text-gray-50 mt-4">Upload Video</label>
         <FileUpload
           onSuccess={handleVideoUploadSuccess}
-          onProgress={handleUploadProgress}
+          onProgress={handleVideoUploadProgress}
           fileType="video"
         />
-        {videoUrl && <p className="text-green-500 text-sm mt-2">Video uploaded!</p>}
+        {videoProgress > 0 && (
+          <div className="w-full bg-gray-600 rounded-full h-1.5 mt-2">
+            <div
+              className="bg-green-500 h-1.5 rounded-full"
+              style={{ width: `${videoProgress}%` }}
+            ></div>
+          </div>
+        )}
+        {videoProgress > 0 && <p className="text-white text-xs mt-1">{videoProgress}%</p>}
 
         <button
           onClick={handleSubmit}

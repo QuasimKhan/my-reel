@@ -23,5 +23,5 @@ export default {
     lightTheme: "light",
   },
   darkMode: "class",
-  lightMode: "light",
+  lightMode: "class",
 };

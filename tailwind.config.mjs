@@ -18,10 +18,8 @@ export default {
     daisyui
   ],
   daisyui: {
-    themes: ["dark" , "light"],
+    themes: ["dark"],
     darkTheme: "dark",
-    lightTheme: "light",
   },
   darkMode: "class",
-  lightMode: "class",
 };

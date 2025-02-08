@@ -118,7 +118,6 @@ export default function ProfilePage() {
         <div className="flex items-center mb-6">
           <div className="flex flex-col ml-4">
             <h1 className="text-3xl font-semibold text-gray-50">{session.user?.name}</h1>
-            <p className="text-gray-50 text-sm"><span>Name</span>: {session.user?.name}</p>
             <p className="text-gray-50 text-sm"><span>UserID</span>: {session.user?.email}</p>
           </div>
         </div>

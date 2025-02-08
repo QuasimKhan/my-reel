@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import Video from "@/models/Video";
 
 //GET handler
 
@@ -33,6 +34,11 @@ export async function DELETE(req,{params}){
         }
 
       const user =  await User.findById(params.userId);
+      const video =await Video.findOne({userId: params.userId})
+
+      if(video){
+        await Video.deleteMany({userId: params.userId});
+      }
 
       if(!user){
         return NextResponse.json({error: "User not found"}, {status: 404});

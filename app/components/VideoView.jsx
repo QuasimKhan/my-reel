@@ -28,7 +28,7 @@ const VideoView = ({ videos }) => {
     onSwipedUp: handleSwipeUp,
     onSwipedDown: handleSwipeDown,
     trackMouse: true,
-    delta: 50, // Adjust this to control swipe sensitivity
+    delta: 100, // Adjust this to control swipe sensitivity
   });
 
   const currentVideo = videos[currentIndex]; // Get current video data
